@@ -74,7 +74,7 @@ stage('SONARQUBE-PR') {
     ORG_NAME=org
     }
 
-      githubNotify account: 'kiransre', context: 'QualityGate', credentialsId: 'Github', description: 'Qualitygate is finished', gitApiUrl: '', repo: "$ORG_NAME", sha: "${env.GIT_COMMIT}", status: 'SUCCESS', targetUrl: ''
+      githubNotify account: 'jothibasu-kamaraj', context: 'QualityGate', credentialsId: 'Github', description: 'Qualitygate is finished', gitApiUrl: '', repo: "$ORG_NAME", sha: "${env.GIT_COMMIT}", status: 'SUCCESS', targetUrl: ''
     }
     failure {
           script {
@@ -85,7 +85,7 @@ stage('SONARQUBE-PR') {
     ORG_NAME=org
     }
 
-    githubNotify account: 'kiransre', context: 'QualityGate', credentialsId: 'Github', description: 'Qualitygate is failed', gitApiUrl: '', repo: "$ORG_NAME", sha: "${env.GIT_COMMIT}", status: 'PENDING', targetUrl: ''
+    githubNotify account: 'jothibasu-kamaraj', context: 'QualityGate', credentialsId: 'Github', description: 'Qualitygate is failed', gitApiUrl: '', repo: "$ORG_NAME", sha: "${env.GIT_COMMIT}", status: 'PENDING', targetUrl: ''
     }
   }
 }
