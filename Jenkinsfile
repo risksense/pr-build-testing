@@ -66,7 +66,7 @@ stage('SONARQUBE-PR') {
     }
     post {
     always {
-    githubPRComment comment: githubPRMessage('Build ${BUILD_NUMBER} ${BUILD_STATUS}'), errorHandler: statusOnPublisherError('UNSTABLE'), statusVerifier: allowRunOnStatus('SUCCESS')
+    githubPRComment comment: githubPRMessage('Build ${WORKSPACE}'), errorHandler: statusOnPublisherError('UNSTABLE'), statusVerifier: allowRunOnStatus('SUCCESS')
     }
     success {
           script {
@@ -76,7 +76,6 @@ stage('SONARQUBE-PR') {
     def org = sh(returnStdout: true, script: 'echo /$/"/{env.GIT_URL/}/"').trim().replaceAll('https://github.com/', '').replaceAll('.git', '')
     ORG_NAME=org
     }
-
       githubNotify account: 'kiransre', context: 'QualityGate', credentialsId: 'Github', description: 'Qualitygate is finished', gitApiUrl: '', repo: "$ORG_NAME", sha: "${env.GIT_COMMIT}", status: 'SUCCESS', targetUrl: ''
     }
     failure {
