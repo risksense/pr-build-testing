@@ -20,9 +20,7 @@ pipeline {
   stages {
 stage('Sonarqube-MR') {
     when {
-        expression {
-    return !(GIT_BRANCH ==~ /^PR-\d+$/)
-        }
+ expression { env.GITHUB_PR_TARGET_BRANCH == null } 
     beforeAgent true
 
         }
@@ -42,9 +40,7 @@ stage('Sonarqube-MR') {
 }
 stage('SONARQUBE-PR') {
         when {
-        expression {
-    return (GIT_BRANCH ==~ /^PR-\d+$/)
-        }
+ expression { env.GITHUB_PR_TARGET_BRANCH != null } 
     beforeAgent true
         }
    environment {
