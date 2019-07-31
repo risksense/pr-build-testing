@@ -66,7 +66,9 @@ stage('SONARQUBE-PR') {
     }
     post {
     always {
-    githubPRComment comment: githubPRMessage('Build ${WORKSPACE}'), errorHandler: statusOnPublisherError('UNSTABLE'), statusVerifier: allowRunOnStatus('SUCCESS')
+      script {
+      pullRequest.comment('This PR is highly illogical..')
+      }
     }
     success {
           script {
