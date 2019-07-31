@@ -66,7 +66,7 @@ stage('SONARQUBE-PR') {
     }
     post {
     always {
-      githubPRComment comment: githubPRMessage("Build ${BUILD_NUMBER} ${BUILD_STATUS}"), statusVerifier: allowRunOnStatus('SUCCESS')
+      githubPRComment comment: githubPRMessage("Build ${env.BUILD_NUMBER} ${env.UILD_STATUS}"), statusVerifier: allowRunOnStatus('SUCCESS')
     }
     success {
           script {
