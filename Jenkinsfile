@@ -65,17 +65,26 @@ stage('SONARQUBE-PR') {
         gitHubPRStatus githubPRMessage('Qualitygate Scan started')
     }
     post {
-    script {
+    success {
+          script {
     def reponame = sh(returnStdout: true, script: 'echo /$/"/{env.GIT_URL/}/"').trim().replaceAll('https://github.com/risksense/', '').replaceAll('.git', '')
     PROJECTKEY=reponame
     PROJECTNAME=reponame
     def org = sh(returnStdout: true, script: 'echo /$/"/{env.GIT_URL/}/"').trim().replaceAll('https://github.com/', '').replaceAll('.git', '')
     ORG_NAME=org
     }
-    success {
+
       githubNotify account: 'kiransre', context: 'QualityGate', credentialsId: 'Github', description: 'Qualitygate is finished', gitApiUrl: '', repo: "$ORG_NAME", sha: "${env.GIT_COMMIT}", status: 'SUCCESS', targetUrl: ''
     }
     failure {
+          script {
+    def reponame = sh(returnStdout: true, script: 'echo /$/"/{env.GIT_URL/}/"').trim().replaceAll('https://github.com/risksense/', '').replaceAll('.git', '')
+    PROJECTKEY=reponame
+    PROJECTNAME=reponame
+    def org = sh(returnStdout: true, script: 'echo /$/"/{env.GIT_URL/}/"').trim().replaceAll('https://github.com/', '').replaceAll('.git', '')
+    ORG_NAME=org
+    }
+
     githubNotify account: 'kiransre', context: 'QualityGate', credentialsId: 'Github', description: 'Qualitygate is failed', gitApiUrl: '', repo: "$ORG_NAME", sha: "${env.GIT_COMMIT}", status: 'PENDING', targetUrl: ''
     }
   }
