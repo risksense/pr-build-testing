@@ -28,7 +28,7 @@ stage('Sonarqube-MR') {
         scannerHome = tool name: 'RSSONAR', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
     }
     steps {
-      checkout([$class: 'GitSCM', branches: [[name: '${GITHUB_BRANCH_HEAD_SHA}']], browser: [$class: 'GithubWeb', repoUrl: 'https://github.com/risksense/pr-build-testing/'], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'Github', name: 'origin', url: 'https://github.com/risksense/pr-build-testing.git']]])
+      //checkout([$class: 'GitSCM', branches: [[name: '${GITHUB_BRANCH_HEAD_SHA}']], browser: [$class: 'GithubWeb', repoUrl: 'https://github.com/risksense/pr-build-testing/'], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'Github', name: 'origin', url: 'https://github.com/risksense/pr-build-testing.git']]])
         script {
             def BRANCH = sh(returnStdout: true, script: 'echo /"/$/{env.GITHUB_BRANCH_NAME/}"').trim()
             BRANCH_NAME=BRANCH
@@ -49,7 +49,7 @@ stage('SONARQUBE-PR') {
         scannerHome = tool name: 'RSSONAR', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
     }
     steps {
-      checkout([$class: 'GitSCM', branches: [[name: '${GITHUB_PR_HEAD_SHA}']], browser: [$class: 'GithubWeb', repoUrl: 'https://github.com/risksense/pr-build-testing/'], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'Github', name: 'origin', url: 'https://github.com/risksense/pr-build-testing.git']]])
+      //checkout([$class: 'GitSCM', branches: [[name: '${GITHUB_PR_HEAD_SHA}']], browser: [$class: 'GithubWeb', repoUrl: 'https://github.com/risksense/pr-build-testing/'], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'Github', name: 'origin', url: 'https://github.com/risksense/pr-build-testing.git']]])
       setGitHubPullRequestStatus context: 'QualityGate', message: 'Scanner is started', state: 'PENDING'
         script {
             def reponame = sh(returnStdout: true, script: 'echo /$/"/{env.GIT_URL/}/"').trim().replaceAll('git://github.com/risksense/', '').replaceAll('.git', '')
