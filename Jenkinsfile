@@ -28,13 +28,15 @@ stage('Sonarqube-MR') {
         scannerHome = tool name: 'RSSONAR', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
     }
     steps {
+      checkout([$class: 'GitSCM', branches: [[name: '${GITHUB_BRANCH_HEAD_SHA}']], browser: [$class: 'GithubWeb', repoUrl: 'https://github.com/risksense/pr-build-testing/'], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'Github', name: 'origin', url: 'https://github.com/risksense/pr-build-testing.git']]])
         script {
-            def BRANCH = sh(returnStdout: true, script: 'echo /"/$/{env.GIT_BRANCH/}"').trim()
+            def BRANCH = sh(returnStdout: true, script: 'echo /"/$/{env.GITHUB_BRANCH_NAME/}"').trim()
             BRANCH_NAME=BRANCH
-            def reponame = sh(returnStdout: true, script: 'echo /"/$/{env.GIT_URL/}/"').trim().replaceAll('https://github.com/risksense/', '').replaceAll('.git', '')
+            def reponame = sh(returnStdout: true, script: 'echo /"/$/{env.GITHUB_REPO_GIT_URL/}/"').trim().replaceAll('git://github.com/risksense/', '').replaceAll('.git', '')
             PROJECTKEY=reponame
             PROJECTNAME=reponame
         }
+        
         sh "printenv | sort"
     }
 }
@@ -47,9 +49,10 @@ stage('SONARQUBE-PR') {
         scannerHome = tool name: 'RSSONAR', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
     }
     steps {
+      checkout([$class: 'GitSCM', branches: [[name: '${GITHUB_PR_HEAD_SHA}']], browser: [$class: 'GithubWeb', repoUrl: 'https://github.com/risksense/pr-build-testing/'], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'Github', name: 'origin', url: 'https://github.com/risksense/pr-build-testing.git']]])
       setGitHubPullRequestStatus context: 'QualityGate', message: 'Scanner is started', state: 'PENDING'
         script {
-            def reponame = sh(returnStdout: true, script: 'echo /$/"/{env.GIT_URL/}/"').trim().replaceAll('https://github.com/risksense/', '').replaceAll('.git', '')
+            def reponame = sh(returnStdout: true, script: 'echo /$/"/{env.GIT_URL/}/"').trim().replaceAll('git://github.com/risksense/', '').replaceAll('.git', '')
             PROJECTKEY=reponame
             PROJECTNAME=reponame
             def org = sh(returnStdout: true, script: 'echo /$/"/{env.GIT_URL/}/"').trim().replaceAll('https://github.com/', '').replaceAll('.git', '')
@@ -59,6 +62,7 @@ stage('SONARQUBE-PR') {
         sh "echo ${env.GIT_URL}"
         sh "echo ${env.GIT_BRANCH}"
         sh 'echo "PR sonar build"'
+      
         gitHubPRStatus githubPRMessage('${GITHUB_PR_COND_REF} run started')
     }
     post {
