@@ -47,6 +47,7 @@ stage('SONARQUBE-PR') {
         scannerHome = tool name: 'RSSONAR', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
     }
     steps {
+      setGitHubPullRequestStatus context: 'QualityGate', message: 'Scanner is started', state: 'PENDING'
         script {
             def reponame = sh(returnStdout: true, script: 'echo /$/"/{env.GIT_URL/}/"').trim().replaceAll('https://github.com/risksense/', '').replaceAll('.git', '')
             PROJECTKEY=reponame
@@ -58,7 +59,7 @@ stage('SONARQUBE-PR') {
         sh "echo ${env.GIT_URL}"
         sh "echo ${env.GIT_BRANCH}"
         sh 'echo "PR sonar build"'
-        gitHubPRStatus githubPRMessage('Qualitygate Scan started')
+        gitHubPRStatus githubPRMessage('${GITHUB_PR_COND_REF} run started')
     }
     post {
     always {
