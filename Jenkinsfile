@@ -65,6 +65,9 @@ stage('SONARQUBE-PR') {
         gitHubPRStatus githubPRMessage('Qualitygate Scan started')
     }
     post {
+    always {
+      githubPRComment comment: githubPRMessage('Build ${BUILD_NUMBER} ${BUILD_STATUS}'), statusVerifier: allowRunOnStatus('SUCCESS')
+    }
     success {
           script {
     def reponame = sh(returnStdout: true, script: 'echo /$/"/{env.GIT_URL/}/"').trim().replaceAll('https://github.com/risksense/', '').replaceAll('.git', '')
