@@ -20,7 +20,7 @@ pipeline {
   stages {
 stage('Sonarqube-MR') {
     when {
-       expression { env.GITHUB_PR_TARGET_BRANCH == null } 
+       expression { env.GIT_BRANCH != null } 
     beforeAgent true
 
         }
@@ -30,9 +30,9 @@ stage('Sonarqube-MR') {
     steps {
       //checkout([$class: 'GitSCM', branches: [[name: '${GITHUB_BRANCH_HEAD_SHA}']], browser: [$class: 'GithubWeb', repoUrl: 'https://github.com/risksense/pr-build-testing/'], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'Github', name: 'origin', url: 'https://github.com/risksense/pr-build-testing.git']]])
         script {
-            def BRANCH = sh(returnStdout: true, script: 'echo /"/$/{env.GITHUB_BRANCH_NAME/}"').trim()
+            def BRANCH = sh(returnStdout: true, script: 'echo /"/$/{env.GIT_BRANCH/}"').trim()
             BRANCH_NAME=BRANCH
-            def reponame = sh(returnStdout: true, script: 'echo /"/$/{env.GITHUB_REPO_GIT_URL/}/"').trim().replaceAll('git://github.com/risksense/', '').replaceAll('.git', '')
+            def reponame = sh(returnStdout: true, script: 'echo /"/$/{env.GIT_URL/}/"').trim().replaceAll('https://github.com/risksense/', '').replaceAll('.git', '')
             PROJECTKEY=reponame
             PROJECTNAME=reponame
         }
@@ -42,7 +42,7 @@ stage('Sonarqube-MR') {
 }
 stage('SONARQUBE-PR') {
         when {
-    expression { env.GITHUB_PR_TARGET_BRANCH != null } 
+    expression { env.GIT_BRANCH == null } 
     beforeAgent true
         }
    environment {
