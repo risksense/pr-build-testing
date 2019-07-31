@@ -66,7 +66,7 @@ stage('SONARQUBE-PR') {
     }
     post {
     always {
-    githubPRComment comment: githubPRMessage('Build ${BUILD_NUMBER} ${BUILD_STATUS}')
+    githubPRComment comment: githubPRMessage('Build ${BUILD_NUMBER} ${BUILD_STATUS}'), errorHandler: statusOnPublisherError('UNSTABLE')
     }
     success {
           script {
